@@ -1,7 +1,7 @@
 venv/
 __pycache__/
-.env
 node_modules/
-.next/
-.vscode/
-.idea/
+.env
+dist/
+build/
+*.pyc

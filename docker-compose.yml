@@ -1,0 +1,52 @@
+services:
+
+  backend:
+    build: ./backend
+
+    ports:
+      - "8000:8000"
+
+    command: >
+      uvicorn app.main:app
+      --host 0.0.0.0
+      --port 8000
+
+    volumes:
+      - ./backend:/app
+
+    depends_on:
+      - postgres
+      - redis
+
+  frontend:
+    build: ./frontend
+
+    ports:
+      - "3000:3000"
+
+    stdin_open: true
+    tty: true
+
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+    depends_on:
+      - backend
+
+  postgres:
+    image: postgres:15
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: analytics
+
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis
+
+    ports:
+      - "6380:6379"
